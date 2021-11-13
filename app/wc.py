@@ -3,8 +3,8 @@
 import os
 import importlib
 import importlib.util
-import software_ui.window
-from download import start_app
+import app.software_ui.window as sui_windows
+from app.download import start_app
 
 def generate_url(soft_name):
     """Start Url creation from list sofware
@@ -67,8 +67,9 @@ def run_app():
 # launch windows_interface
     # FIXME fenetre HS
     # sotfware_liste = win_ui.main()
-    sotfware_list = software_ui.window.Windows_interface().result
-    print(sotfware_list)
+    #TEST: recupere les data de la fenetre
+    sotfware_list = sui_windows.Windows_interface().result_list_to_return
+    print("sotfware_list",sotfware_list)
 
 
     #  convert liste software to liste software/url

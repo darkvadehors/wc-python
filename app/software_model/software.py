@@ -1,13 +1,12 @@
-def software_list():
-    model_pattern = (
-            {"designer":["firefox","chrome","filezilla","Adboe XD","MAMP","firefox","chrome","filezilla","Adboe XD","MAMP"]},
-            {"coder0":["firefox","vscode","filezilla","titi","textedit"]},
-            {"coder1":["tutu","tutu","tuut"]},
-            {"coder2":["titi","titi","titit"]},
-            {"coder3":["tatat","tata","tatat"]},
-            {"coder4":["toto","toto","totot"]}
+
+def model_pattern():
+    #FIXME: convertir en json  fichier txt
+    #  fichier stoke sur le repo git en mode texte
+    model_pattern_tuple = (
+            {"designer":["firefox","vscode"]},
+            {"coder":["firefox","vscode"]}
             )
-    return model_pattern
+    return model_pattern_tuple
 
 
 if __name__ == "__main__":
