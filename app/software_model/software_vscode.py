@@ -1,3 +1,5 @@
+#  https://code.visualstudio.com/sha/download?build=stable&os=darwin-universal
+#  https://az764295.vo.msecnd.net/stable/3a6960b964327f0e3882ce18fcebd07ed191b316/VSCode-darwin-universal.zip
 import os
 
 def make_url():
