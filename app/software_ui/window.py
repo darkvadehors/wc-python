@@ -167,7 +167,6 @@ class Windows_interface:
 
         model = self.list_left.get(self.list_left.curselection()) # model => designer
         logging.info("Model in gerenator : " + model)
-        print(model)
 
         # insrt in list new software
         for idx_tuple,dict_ligne in enumerate(self.model_pattern):
