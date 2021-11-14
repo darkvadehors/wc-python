@@ -16,16 +16,17 @@ def make_url():
     else:
         print("Change d'ordinateur")
 
-    return "https://code.visualstudio.com/sha/download?build=stable&os={}-universal".format(
+    return "https://code.visualstudio.com/sha/\
+        download?build=stable&os={}-universal".format(
         os_type
         )
 
-        #print("test",[x for x in a for a in lst])
-        # try:
-        #     float(lst[0])
-        #     print("1",lst[0])
-        # except:
-        #     pass
+    #print("test",[x for x in a for a in lst])
+    # try:
+    #     float(lst[0])
+    #     print("1",lst[0])
+    # except:
+    #     pass
 
 if __name__ == "__main__":
     print(make_url())

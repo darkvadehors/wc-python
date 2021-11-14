@@ -5,7 +5,8 @@ def model_pattern():
     model_pattern_tuple = (
             {"designer":["firefox","vscode"]},
             {"coder":["firefox","vscode"]},
-            {"test":["test"]}
+            {"test":["test"]},
+            {"testfirefox":["firefox"]}
             )
     return model_pattern_tuple
 

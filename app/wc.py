@@ -1,6 +1,7 @@
 # https://docs.python.org/fr/3.8/library/importlib.html#importlib.import_module
 
 import os
+import json
 import logging
 import importlib
 import tempfile
@@ -45,7 +46,9 @@ def import_lib(soft_name):
     # get cureent directory
     current_patch = os.getcwd()
     # make temp patch for import
-    spec = importlib.util.spec_from_file_location("alias" , f"{current_patch}/app/software_model/software_{soft_name}.py")
+    spec = importlib.util.spec_from_file_location("alias" ,
+            f"{current_patch}/app/software_model/software_{soft_name}.py")
+
     module_to_import = importlib.util.module_from_spec(spec)
 
     # import patch
@@ -108,7 +111,7 @@ def download(software_url):
             file.write(downloaded_obj.content)
             file.close()
         # Control si le fichier est déjà present
-            logging.info(software_name)
+            logging.info(f"File {software_name} doesn't exist, downloaded")
     #return the software patch for instal module
     return complete_save_path
 
@@ -126,6 +129,7 @@ def directory()-> str:
     # Check si dossier deja creer
     #FIXME: trouver la validation if exist ou un truc du genre
     if not os.path.isdir(save_path):
+
 #         test = input(f"Le dossier {folder} n'éxiste pas!\
 # Voulez vous le créer ? (yes/no) " )
 #         if test == "yes":
@@ -137,6 +141,7 @@ def directory()-> str:
 #         else:
 #             logging.warning("Mauvais Choix !")
 #             exit()
+
             p = pathlib.Path(save_path)
             p.mkdir(parents=True, exist_ok=True)
     return save_path
@@ -150,7 +155,9 @@ def install_download_app( software_path):
     print("148 software_extension[1]",software_extension[1])
 
     if software_extension[1] == ".pkg":
-        subprocess .call(f"installer -verbose -pkg {software_path} -target /", shell =True)
+        subprocess .call(
+            f"installer -verbose -pkg {software_path} -target /",
+            shell =True)
 
     elif software_extension[1] == ".dmg":
         ...
@@ -170,11 +177,19 @@ def install_download_app( software_path):
         print("Extension non reconnu")
 
 
-def check_version(): #TODO
+def check_version(): #TODO fonction futur a finir
     """Check on distant repository if version as same
     """
-    import json
 
+    # recuperation sur github du hash du dernier commit
+    # et comparaison
+
+    # FIXME:
+    # a voir si on garde, code fonctionnel
+    # pour injecter la liste des softwares dans une
+    # variable en passant par un fichier tmp detruit juste après
+
+    # make tmpfile
     with tempfile.TemporaryFile() as fp:
         temp = tempfile.NamedTemporaryFile(prefix='wc_', suffix='.json')
         url = 'http://dev.johnben.fr/software.json'
@@ -198,8 +213,10 @@ def run_app():
     """
 
     # charge le Logger
-    logging.basicConfig(filename='myapp.log', level=logging.INFO,\
-      format='%(asctime)s -- %(filename)s -- %(lineno)d -- %(name)s -- %(levelname)s -- %(message)s')
+    logging.basicConfig(filename='myapp.log',
+                        level=logging.INFO,
+      format='%(asctime)s -- %(filename)s -- %(lineno)d -\
+      - %(name)s -- %(levelname)s -- %(message)s')
 
     logging.info("check Version application from Github")
     check_version()# TODO
@@ -229,8 +246,11 @@ def run_app():
             # récupréation du nom du fichier
             url = url_dict[software]
             logging.debug(url)
-            file_name = request.urlopen(request.Request(url)).info().get_filename()
-            logging.info(f"récupération dossier distant du nom de fichier {file_name}")
+            file_name = request.urlopen(
+                request.Request(url)).info().get_filename()
+
+            logging.info(f"récupération dossier \
+                distant du nom de fichier {file_name}")
         except:
             logging.error("impossible de récuéperer le nom du file")
         try:
