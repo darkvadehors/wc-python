@@ -4,12 +4,20 @@ from app.software_model.software import model_pattern
 from tkinter.constants import ANCHOR, BOTH, BOTTOM, LEFT, YES, RIGHT
 
 class Windows_interface:
+    """Make windows selection
+
+        ARGS:
+            None
+
+        Return:
+            List of software to install
+    """
 
     def __init__(self):
         self.ui_windows = tk.Tk()
         # get model_pattern
         self.model_pattern = model_pattern()
-        self.result_list_to_return = ["tutu"]
+        self.result_list_to_return = []
 
 
         # Model List
@@ -116,7 +124,7 @@ class Windows_interface:
 
         row_bottom = tk.Frame(row2)
         row_bottom.pack(side=BOTTOM)
-        bouton_quit = tk.Button(row2, text="Quitter",anchor="se",  command=self.ui_windows.destroy)
+        bouton_quit = tk.Button(row2, text="Quitter",anchor="se",  command=self.close_windows)
         bouton_quit.pack(side=BOTTOM)
         send_Button = tk.Button(row2, text ="Installer",anchor="sw", command=self.send_data)
         send_Button.pack(side=BOTTOM)
@@ -125,7 +133,9 @@ class Windows_interface:
         row2.pack(fill=BOTH, expand=YES)
 
         self.list_left.selection_set(0)
-        self.software_right_list_generator()
+        self.result_list_to_return = self.software_right_list_generator()
+        # self.software_right_list_generator()
+        logging.info(self.result_list_to_return)
         #return self.list_right_software_name
 
 
@@ -150,12 +160,14 @@ class Windows_interface:
 
             RETURN: insert label in the Right Liste from the list_right_software_name
         """
-        logging.info("enter in generator")
+        logging.info("Enter in generator")
         #  Vide la lsite
         list_right_software_name = []
         self.frame_delete(self.row1_frame_right)
 
         model = self.list_left.get(self.list_left.curselection()) # model => designer
+        logging.info("Model in gerenator : " + model)
+        print(model)
 
         # insrt in list new software
         for idx_tuple,dict_ligne in enumerate(self.model_pattern):
@@ -184,11 +196,12 @@ class Windows_interface:
     #
 
     def send_data(self):
-        """[summary]
+        """Update result_list_to_return for wc.py
 
         Returns:
-            [type]: [description]
+            str: string contains software dictionnary
         """
+
         self.result_list_to_return = self.list_right_software_name
         self.ui_windows.destroy()
         return self.result_list_to_return
@@ -214,6 +227,16 @@ class Windows_interface:
         """
         for widget in frame_to_delete.winfo_children():
             widget.destroy()
+
+    def close_windows(self):
+        """Close windows and empty software list
+
+        Returns:
+            None
+        """
+        self.result_list_to_return = []
+        self.ui_windows.destroy()
+        return self.result_list_to_return
 
 
 
