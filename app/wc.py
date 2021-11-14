@@ -24,7 +24,6 @@ def run_app():
 
     # start Logger
     save_path = directory()
-    print("save_path --------> ",save_path)
     logging.basicConfig( filename=save_path + 'wc.log',
                         level=logging.INFO,
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
@@ -54,7 +53,7 @@ def run_app():
         except:
             logging.error(f"impossible de resoudre l'url de {software}")
         try:
-            print("238 url_dict[software]",url_dict[software])
+            print("57 url_dict[software]",url_dict[software])
             # récupréation du nom du fichier
             url = url_dict[software]
             logging.debug(url)
@@ -73,7 +72,7 @@ distant du nom de fichier {file_name}")
             logging.error("impossible de download le file")
 
     # lance l'installation
-    logging.debug(f"252 file_name {file_name}")
+    logging.debug(f"76 file_name {file_name}")
     install_download_app( software_path)
 
 
@@ -152,7 +151,7 @@ def software_name_extractor(software_url):
         software_url (string): url of the software
     """
 
-    print("64 software_url",software_url)
+    print("154 software_url",software_url)
     # Split Url for extract extesion
     software_name = os.path.splitext(software_url)
 
