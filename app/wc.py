@@ -133,14 +133,14 @@ def import_lib(soft_name):
     """
 
     # get cureent directory
-    current_patch = os.getcwd()
-    # make temp patch for import
+    current_path = os.getcwd()
+    # make temp path for import
     spec = importlib.util.spec_from_file_location("alias" ,
-            f"{current_patch}/app/software_model/software_{soft_name}.py")
+            f"{current_path}/app/software_model/software_{soft_name}.py")
 
     module_to_import = importlib.util.module_from_spec(spec)
 
-    # import patch
+    # import path
     spec.loader.exec_module(module_to_import)
     return module_to_import
 
@@ -188,7 +188,7 @@ def download(software_url):
     # Make object for download file
     downloaded_obj = requests.get(software_url)
 
-    # Make patch for save the file
+    # Make path for save the file
     save_path = directory()
     complete_save_path = os.path.join(save_path, software_name)
 
@@ -200,7 +200,7 @@ def download(software_url):
             file.close()
         # Control si le fichier est déjà present
             logging.info(f"File {software_name} doesn't exist, downloaded")
-    #return the software patch for instal module
+    #return the software path for instal module
     return complete_save_path
 
 
