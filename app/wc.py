@@ -22,11 +22,13 @@ def run_app():
             - `downloader`
     """
 
-    # charge le Logger
-    logging.basicConfig(filename='myapp.log',
+    # start Logger
+    save_path = directory()
+    print("save_path --------> ",save_path)
+    logging.basicConfig( filename=save_path + 'wc.log',
                         level=logging.INFO,
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
-      - %(name)s -- %(levelname)s -- %(message)s')
+- %(name)s -- %(levelname)s -- %(message)s')
 
     logging.info("check Version application from Github")
     check_version()# TODO
@@ -60,7 +62,7 @@ def run_app():
                 request.Request(url)).info().get_filename()
 
             logging.info(f"récupération dossier \
-                distant du nom de fichier {file_name}")
+distant du nom de fichier {file_name}")
         except:
             logging.error("impossible de récuéperer le nom du file")
         try:
