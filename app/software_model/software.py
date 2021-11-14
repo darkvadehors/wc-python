@@ -4,7 +4,8 @@ def model_pattern():
     #  fichier stoke sur le repo git en mode texte
     model_pattern_tuple = (
             {"designer":["firefox","vscode"]},
-            {"coder":["firefox","vscode"]}
+            {"coder":["firefox","vscode"]},
+            {"test":["test"]}
             )
     return model_pattern_tuple
 
