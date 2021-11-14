@@ -126,17 +126,19 @@ def directory()-> str:
     # Check si dossier deja creer
     #FIXME: trouver la validation if exist ou un truc du genre
     if not os.path.isdir(save_path):
-        test = input(f"Le dossier {folder} n'éxiste pas!\
-Voulez vous le créer ? (yes/no) " )
-        if test == "yes":
+#         test = input(f"Le dossier {folder} n'éxiste pas!\
+# Voulez vous le créer ? (yes/no) " )
+#         if test == "yes":
+#             p = pathlib.Path(save_path)
+#             p.mkdir(parents=True, exist_ok=True)
+#         elif test == "no":
+#             logging.warning("Annulé.")
+#             pass
+#         else:
+#             logging.warning("Mauvais Choix !")
+#             exit()
             p = pathlib.Path(save_path)
             p.mkdir(parents=True, exist_ok=True)
-        elif test == "no":
-            logging.warning("Annulé.")
-            pass
-        else:
-            logging.warning("Mauvais Choix !")
-            exit()
     return save_path
 
 
@@ -148,38 +150,24 @@ def install_download_app( software_path):
     print("148 software_extension[1]",software_extension[1])
 
     if software_extension[1] == ".pkg":
-        print(software_extension[1])
         subprocess .call(f"installer -verbose -pkg {software_path} -target /", shell =True)
+
     elif software_extension[1] == ".dmg":
-        print(software_extension[1])
+        ...
 
     elif software_extension[1] == ".bzip":
-        print(software_extension[1])
+        ...
 
     elif software_extension[1] == ".tar":
-        print(software_extension[1])
+        ...
 
     elif software_extension[1] == ".pkg":
-        print(software_extension[1])
+        ...
 
     elif software_extension[1] == ".json":
-        print(software_extension[1])
-        subprocess .call(f"textedit {software_path} -target /", shell =True)
+        subprocess .call(f"open -a TextEdit {software_path}", shell =True)
     else:
         print("Extension non reconnu")
-
-
-
-    print( "148 software_extension",software_extension)
-
-
-    # os.system("open /Applications/Google\ Chrome.app")
-    # os.system("open /Applications/Todoist.app")
-    # os.system("open /Applications/WhatsApp.app")
-    #!/ usr/bin/env python
-
-
-
 
 
 def check_version(): #TODO
