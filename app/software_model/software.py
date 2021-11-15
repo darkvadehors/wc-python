@@ -3,8 +3,8 @@ def model_pattern():
     #FIXME: convertir en json  fichier txt
     #  fichier stoke sur le repo git en mode texte
     model_pattern_tuple = (
-            {"designer":["firefox","vscode"]},
-            {"coder":["firefox","vscode"]},
+            {"designer":["firefox","vscode"]},#TODO: add MAMP,
+            {"coder":["firefox","vscode"]},#TODO: github Desktop, git, MAMP
             {"test":["test"]},
             {"testfirefox":["firefox"]}
             )
