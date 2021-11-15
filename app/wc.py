@@ -1,16 +1,19 @@
 # https://docs.python.org/fr/3.8/library/importlib.html#importlib.import_module
 
-import os
+import importlib
+import importlib.util
 import json
 import logging
-import importlib
-import tempfile
-import requests
-import importlib.util
+import os
 import pathlib
 import subprocess
+import tempfile
 from urllib import request
+
+import requests
+
 import app.software_ui.window as sui_windows
+
 
 def run_app():
     """Same as name Run App
@@ -79,7 +82,7 @@ def run_app():
 
 
 def software_distant_name_resolver(url):
-    logging.debug(f"Enter in software distant name resolver -> {url}")
+    logging.debug(f"===>Enter in software distant name resolver -> {url}")
     file_name:str = ""
 
     # récuprération du nom du fichier
@@ -126,7 +129,7 @@ def generate_url(soft_name):
         RETURN: str: URL to download software
 
     """
-    logging.debug(f"Enter in generate url -> { soft_name }")
+    logging.debug(f"===>Enter in generate url -> { soft_name }")
 
     try:
         module = import_lib(soft_name)
@@ -146,7 +149,7 @@ def import_lib(soft_name):
 
         RETURN: none lib is charged
     """
-    logging.debug(f"Enter in import Lib -> { soft_name }")
+    logging.debug(f"===>Enter in import Lib -> { soft_name }")
 
     # get cureent directory
     current_path = os.getcwd()
@@ -201,7 +204,7 @@ def download(software_url):
     Return:
         File
     """
-    logging.debug(f"Enter in download -> { software_url } ")
+    logging.debug(f"===>Enter in download -> { software_url } ")
 
     software_name = software_name_extractor(software_url)
 
@@ -211,15 +214,16 @@ def download(software_url):
     # Make path for save the file
     save_path = directory()
     complete_save_path = os.path.join(save_path, software_name)
-
+    logging.debug(f"path to save before dl {save_path}{software_name}")
     # check if file exist
     if not os.path.isfile(complete_save_path):
         with open( complete_save_path, "wb") as file:
+            logging.warn(f"File -> {software_name} doesn't exist, downloaded")
             # écriture du fichier dans abs_path
             file.write(downloaded_obj.content)
             file.close()
-        # Control si le fichier est déjà present
-            logging.warn(f"File -> {software_name} doesn't exist, downloaded")
+    else:
+        logging.warn(f"File -> {software_name} exist, not downloaded")
     #return the software path for instal module
 
     logging.debug(f"adresse retour complete_save_path -> { complete_save_path }")
@@ -237,28 +241,14 @@ def directory()-> str:
     save_path = current_path + "/" + folder + "/"
 
     # Check si dossier deja creer
-    #FIXME: trouver la validation if exist ou un truc du genre
     if not os.path.isdir(save_path):
-
-#         test = input(f"Le dossier {folder} n'éxiste pas!\
-# Voulez vous le créer ? (yes/no) " )
-#         if test == "yes":
-#             p = pathlib.Path(save_path)
-#             p.mkdir(parents=True, exist_ok=True)
-#         elif test == "no":
-#             logging.warning("Annulé.")
-#             pass
-#         else:
-#             logging.warning("Mauvais Choix !")
-#             exit()
-
-            p = pathlib.Path(save_path)
-            p.mkdir(parents=True, exist_ok=True)
+        p = pathlib.Path(save_path)
+        p.mkdir(parents=True, exist_ok=True)
     return save_path
 
 
 def install_download_app( software_path):
-    logging.debug(f"Enter in install download app  ->{software_path}")
+    logging.debug(f"===>Enter in install download app  ->{software_path}")
 
     # Split name for extract extension
     software_extension = os.path.splitext(software_path)
@@ -267,8 +257,13 @@ def install_download_app( software_path):
     if software_extension[1] == ".pkg":
         logging.debug(f"file is ->pkg")
         subprocess .call(
-            f"installer -pkg {software_path} -target /",
+            f"sudo -S installer -allowUntrusted -verboseR -pkg {software_path} -target /",
             shell =True)
+
+
+
+
+
 
     elif software_extension[1] == ".dmg":
         logging.debug(f"file is ->dmg")
