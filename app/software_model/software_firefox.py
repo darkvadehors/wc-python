@@ -5,26 +5,18 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 
 def make_url():
-    # return "i am firefoyx"
+    """ Class model for nmake download url """
 
-    # class Firefox( software.Creation_strategy ):
-    #     """ Class model for nmake download url """
-    #     print("Recherche de la derniere version...")
-    #     @classmethod
-    #     def make_url(cls):
-
-    _url_base = """
-    https://download-installer.cdn.mozilla.net/pub/firefox/releases/
-    """
+    _url_base ="https://download-installer.cdn.mozilla.net/pub/firefox/releases/"
     _remote_software_name = "Firefox"
 
-    # initialise all variable
+    # initialize all variables
     lst = []
     version = ["",""]
     ligne = ["",""]
 
     # remplace space in url
-    url = _url_base.replace(" ","%20")
+    url = _url_base #.replace(" ","%20")#FIXME pour supprime les espaces
 
     req = Request(url)
     a = urlopen(req).read()
