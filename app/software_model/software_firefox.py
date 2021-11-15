@@ -13,8 +13,9 @@ def make_url():
     #     @classmethod
     #     def make_url(cls):
 
-    _url_base = 'https://download-installer.cdn.mozilla.net/\
-                pub/firefox/releases/'
+    _url_base = """
+    https://download-installer.cdn.mozilla.net/pub/firefox/releases/
+    """
     _remote_software_name = "Firefox"
 
     # initialise all variable

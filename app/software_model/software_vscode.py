@@ -17,7 +17,7 @@ def make_url():
         print("Change d'ordinateur")
 
     return "https://code.visualstudio.com/sha/\
-        download?build=stable&os={}-universal".format(
+download?build=stable&os={}-universal".format(
         os_type
         )
 
