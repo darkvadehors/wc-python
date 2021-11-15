@@ -7,7 +7,7 @@ Usage:
 
 from setuptools import setup
 
-APP = ['wc_main.py']
+APP = ['wc.py']
 DATA_FILES = []
 OPTIONS = {}
 
