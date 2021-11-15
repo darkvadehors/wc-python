@@ -1,8 +1,8 @@
 import tkinter as tk
 import logging
 from app.software_model.software import model_pattern
-from tkinter.constants import BOTH, BOTTOM, LEFT, RIGHT, TOP, Y, YES
-
+from tkinter.constants import BOTH, BOTTOM, HORIZONTAL, LEFT, RIGHT, TOP, Y, YES
+from tkinter import ttk
 class Windows_interface:
     """Make windows selection
 
@@ -32,8 +32,8 @@ class Windows_interface:
         # Mode Comprehension de liste pour la forme
         # Generate idx for first left list
         [list_left_model_name.append(val)
-         for model in self.model_pattern
-         for _ , val in enumerate(model)]
+            for model in self.model_pattern
+            for _ , val in enumerate(model)]
 
         list_left_model_name = tk.StringVar(value=list_left_model_name)
 
@@ -64,7 +64,6 @@ class Windows_interface:
         row0_label_title1 = tk.Label(row0,
                                      text="Bienvenue dans le WC",
                                      font=(FONT1, 30 ),
-                                     bg=COLOR,
                                      padx=10,
                                      pady=10)
 
@@ -145,7 +144,7 @@ class Windows_interface:
         self.list_left.selection_set(0)
         self.result_list_to_return = self.software_right_list_generator()
         # self.software_right_list_generator()
-        logging.info(self.result_list_to_return)
+        logging.debug(self.result_list_to_return)
         #return self.list_right_software_name
 
 
@@ -159,14 +158,14 @@ class Windows_interface:
             RETURN: insert label in the Right Liste
                 from the list_right_software_name
         """
-        logging.info("Enter in generator")
+        logging.debug("Enter in generator")
         #  Vide la lsite
         list_right_software_name = []
         self.frame_delete(self.list_right)
 
         # model => designer
         model = self.list_left.get(self.list_left.curselection())
-        logging.info("Model in gerenator : " + model)
+        logging.debug(f"Model in gerenator  ->{model}")
 
         # insrt in list new software
         for idx_tuple,dict_ligne in enumerate(self.model_pattern):
