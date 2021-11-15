@@ -29,9 +29,7 @@ def run_app():
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
 - %(name)s -- %(levelname)s -- %(message)s')
 
-    logging.info("check Version application from Github")
     check_version()# TODO a faire dans un futur proche
-    logging.info("version Checked")
 
     url_dict = {}
 
@@ -49,11 +47,11 @@ def run_app():
             #  convert software liste to liste software/url
             url_dict[software] = generate_url(software)
             file_name = url_dict[software]
-            logging.info(f"convert in url ok {url_dict[software]}")
+            logging.debug(f"convert in url {software} into {file_name}")
         except:
-            logging.error(f"impossible de resoudre l'url de {software}")
-        print("55 file name", file_name)
-        print("56 url dict",url_dict[software])
+            logging.error(f"impossible de resoudre l'url de -> {software}")
+
+        # TEST: a controler
         # name = software_distant_name_resolver(url_dict[software])
         # print("name ",name)
 #        try:
@@ -69,28 +67,26 @@ def run_app():
 #            logging.error("impossible de récuéperer le nom du file")
         try:
             # Download file from URL
-            # software_path = download(url_dict[software]) #FIXME: Activate downloader
-            logging.info(f"Téchargement du fichier ok {software_path}")
+            software_path = download(url_dict[software]) #FIXME: Activate downloader
+            logging.debug(f"Téchargement du fichier -> {software_path}")
         except:
             logging.error("impossible de download le file")
 
     # lance l'installation
-    logging.debug(f"file_name {file_name}")
+    logging.debug(f"file_name -> {file_name}")
 
     install_download_app( software_path)
 
 
 def software_distant_name_resolver(url):
-    print("83-------> ",url)
+    logging.debug(f"Enter in software distant name resolver -> {url}")
     file_name:str = ""
-    logging.debug(f"Initialisation de File name {file_name} ")
 
-# récuprération du nom du fichier
-    logging.debug(f"url avant recuperation du nom {url}")
+    # récuprération du nom du fichier
     file_name = request.urlopen(request.Request(url)).info().get_filename()
-
-    logging.info(f"récupération du nom de fichier sur le dossier distant : \
+    logging.debug(f"récupération du nom de fichier sur le dossier distant : \
 { file_name }")
+
     return file_name
 
 
@@ -130,13 +126,14 @@ def generate_url(soft_name):
         RETURN: str: URL to download software
 
     """
+    logging.debug(f"Enter in generate url -> { soft_name }")
 
     try:
         module = import_lib(soft_name)
-        logging.debug(f"sortie Creation import lib { module }")
+        logging.debug(f"sortie Creation import lib -> { module }")
         return module.make_url()
     except:
-        logging.warning(f"Software Libary {soft_name} not found")
+        logging.error(f"Software Libary -> {soft_name} not found")
 
 
 def import_lib(soft_name):
@@ -149,10 +146,12 @@ def import_lib(soft_name):
 
         RETURN: none lib is charged
     """
+    logging.debug(f"Enter in import Lib -> { soft_name }")
 
     # get cureent directory
     current_path = os.getcwd()
-    logging.debug(f"current_path :{current_path}")
+
+    logging.debug(f"current_path -> {current_path}")
     # make temp path for import
     spec = importlib.util.spec_from_file_location("alias" ,
             f"{current_path}/app/software_model/software_{soft_name}.py")
@@ -165,13 +164,14 @@ def import_lib(soft_name):
 
 
 def software_name_extractor(software_url):
-    """Extrct Name from URL
+    """Extract Name from URL
 
     Args:
         software_url (string): url of the software
     """
 
-    print("154 software_url",software_url)
+    logging.debug(f"Entre in software name extractor -> {software_url}")
+
     # Split Url for extract extesion
     software_name = os.path.splitext(software_url)
 
@@ -201,9 +201,10 @@ def download(software_url):
     Return:
         File
     """
+    logging.debug(f"Enter in download -> { software_url } ")
 
     software_name = software_name_extractor(software_url)
-    logging.info(f"adresse retour software_name_extractor {software_name}")
+
     # Make object for download file
     downloaded_obj = requests.get(software_url)
 
@@ -218,8 +219,10 @@ def download(software_url):
             file.write(downloaded_obj.content)
             file.close()
         # Control si le fichier est déjà present
-            logging.info(f"File {software_name} doesn't exist, downloaded")
+            logging.warn(f"File -> {software_name} doesn't exist, downloaded")
     #return the software path for instal module
+
+    logging.debug(f"adresse retour complete_save_path -> { complete_save_path }")
     return complete_save_path
 
 
@@ -255,32 +258,35 @@ def directory()-> str:
 
 
 def install_download_app( software_path):
-    print("software_path in install -> ",software_path)
+    logging.debug(f"Enter in install download app  ->{software_path}")
 
     # Split name for extract extension
     software_extension = os.path.splitext(software_path)
-    print("148 software_extension[1]",software_extension[1])
+    logging.debug(f" split path & get extension  -> {software_extension[1]}")
 
     if software_extension[1] == ".pkg":
+        logging.debug(f"file is ->pkg")
         subprocess .call(
-            f"installer -verbose -pkg {software_path} -target /",
+            f"installer -pkg {software_path} -target /",
             shell =True)
 
     elif software_extension[1] == ".dmg":
+        logging.debug(f"file is ->dmg")
         ...
 
     elif software_extension[1] == ".bzip":
+        logging.debug(f"file is ->bzip")
         ...
 
     elif software_extension[1] == ".tar":
-        ...
-
-    elif software_extension[1] == ".pkg":
+        logging.debug(f"file is ->tar")
         ...
 
     elif software_extension[1] == ".json":
+        logging.debug(f"file is ->json")
         subprocess .call(f"open -a TextEdit {software_path}", shell =True)
     else:
+        logging.debug(f"unknow file")
         print("Extension non reconnu")
 
 
