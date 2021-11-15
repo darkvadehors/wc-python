@@ -1,7 +1,7 @@
 import tkinter as tk
 import logging
 from app.software_model.software import model_pattern
-from tkinter.constants import BOTH, BOTTOM, YES
+from tkinter.constants import BOTH, BOTTOM, LEFT, RIGHT, Y, YES
 
 class Windows_interface:
     """Make windows selection
@@ -109,20 +109,26 @@ class Windows_interface:
         row1_frame2.grid(row=1, column=1,sticky="news")
 
 
-        row2 = tk.Frame(self.ui_windows, padx=10, pady=10,bg="red")
+        row2 = tk.Frame(self.ui_windows, padx=10, pady=10)
 
-        row_bottom = tk.Frame(row2)
-        row_bottom.pack(side=BOTTOM)
-        bouton_quit = tk.Button(row2,
-                                text="Quitter",
-                                anchor="se",
+        row_bottom = tk.Frame(row2, padx=10, pady=10)
+        row_bottom.pack(side=BOTTOM, fill=BOTH, expand=YES)
+        bouton_quit = tk.Button(row_bottom,
+                                text="Annuler",
+                                anchor="center",
+                                width=10,
+                                cursor="pirate",
+                                activeforeground="red",
                                 command=self.close_windows)
-        bouton_quit.pack(side=BOTTOM)
-        send_Button = tk.Button(row2,
+        bouton_quit.pack(side=LEFT, fill=BOTH)
+        send_Button = tk.Button(row_bottom,
                                 text ="Installer",
-                                anchor="sw",
+                                anchor="center",
+                                cursor="heart",
+                                activeforeground="green",
+                                width=10,
                                 command=self.send_data)
-        send_Button.pack(side=BOTTOM)
+        send_Button.pack(side=RIGHT, fill=BOTH)
 
         # row2.grid(row=3, columnspan=2)
         row2.pack(fill=BOTH, expand=YES)
