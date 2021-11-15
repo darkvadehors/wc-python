@@ -46,7 +46,7 @@ class Windows_interface:
 
         # winodws Dimension
         self.ui_windows.minsize(420,400)
-        self.ui_windows.maxsize(300,720)
+        self.ui_windows.maxsize(425,720)
 
         # windows Left Ico
         # windows.iconbitmap("logo.ico")
