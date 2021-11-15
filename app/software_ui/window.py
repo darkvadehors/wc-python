@@ -1,7 +1,7 @@
 import tkinter as tk
 import logging
 from app.software_model.software import model_pattern
-from tkinter.constants import BOTH, BOTTOM, LEFT, RIGHT, Y, YES
+from tkinter.constants import BOTH, BOTTOM, LEFT, RIGHT, TOP, Y, YES
 
 class Windows_interface:
     """Make windows selection
@@ -46,7 +46,7 @@ class Windows_interface:
 
         # winodws Dimension
         self.ui_windows.minsize(420,400)
-        # windows.maxsize(300,720)
+        self.ui_windows.maxsize(300,720)
 
         # windows Left Ico
         # windows.iconbitmap("logo.ico")
@@ -72,42 +72,51 @@ class Windows_interface:
 
         #  ------------------- Row 1 -------------------
 
-        row1 = tk.Frame(self.ui_windows,  padx=10, pady=10)
+        row1 = tk.Frame(self.ui_windows,  padx=20, pady=20)
         # row1.grid(columnspan=2)
-        row1.pack(fill=BOTH, expand=YES)
+        row1.pack( side=TOP, fill=BOTH, expand=YES )
 
-        self.row1_frame1 = tk.Frame(row1, padx=10, pady=10)
+        self.row1_frame1 = tk.Frame(row1, padx=10)
+
         row1_frame_left = tk.LabelFrame(self.row1_frame1,
                                         text="Choix du modèle",
                                         padx=10,
-                                        pady=10)
+                                        pady=10
+                                        )
 
         # ******************** list ********************
 
         self.list_left = tk.Listbox(row1_frame_left,
                                     listvariable=list_left_model_name,
-                                    height=5 )
+                                    height=5
+                                    )
         self.list_left.pack(fill=BOTH, expand=YES)
         self.list_left.bind('<<ListboxSelect>>',
                             self.software_right_list_generator)
 
-        row1_frame_left.grid( row=0 ,column=0,sticky="nw" )
-        self.row1_frame1.grid(row=1, column=0,sticky="nw")
+        row1_frame_left.grid( row=0 ,column=0 )
+        self.row1_frame1.grid(row=1, column=0)
+
+        row1_frame2 = tk.Frame(row1, padx=10)
 
 
-        row1_frame2 = tk.LabelFrame(row1, text="Liste des Logiciels",
-                                    padx=10,
-                                    pady=10)
-        self.row1_frame_right = tk.Listbox(row1_frame2,
-                                           borderwidth=0,
-                                           highlightthickness=0,
-                                           height=5)
+        row1_frame_right = tk.LabelFrame(row1_frame2,
+                                        text="Liste des Logiciels",
+                                        height=10,
+                                        padx=10,
+                                        pady=10,
+                                        )
 
         # ******************** list ********************
+        #FIXME: voir si la liste est plus grand pour bloque
+        #       la dimension
+        self.list_right = tk.Listbox(row1_frame_right,
+                                           borderwidth=0,
+                                           height=5)
 
-        self.row1_frame_right.grid( row=0 ,column=0 )
+        self.list_right.pack(fill=BOTH, expand=YES)
+        row1_frame_right.grid(row=1, column=1,sticky="news")
         row1_frame2.grid(row=1, column=1,sticky="news")
-
 
         row2 = tk.Frame(self.ui_windows, padx=10, pady=10)
 
@@ -153,7 +162,7 @@ class Windows_interface:
         logging.info("Enter in generator")
         #  Vide la lsite
         list_right_software_name = []
-        self.frame_delete(self.row1_frame_right)
+        self.frame_delete(self.list_right)
 
         # model => designer
         model = self.list_left.get(self.list_left.curselection())
@@ -167,7 +176,7 @@ class Windows_interface:
 
         for key, soft in enumerate(list_right_software_name):
             row1_frame_right_label = key
-            row1_frame_right_label = tk.Label( self.row1_frame_right ,
+            row1_frame_right_label = tk.Label( self.list_right ,
                                               text= soft,
                                               anchor="w"  )
 
