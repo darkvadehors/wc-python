@@ -10,9 +10,11 @@ import subprocess
 import tempfile
 from urllib import request
 import requests
+from git import Repo
+
 
 import app.software_ui.window as sui_windows
-from app.extension_strategy import Installationstrategy
+from app.extension_strategy import InstallationStrategy
 from app.extension_strategy import NAME_STRATEGY_MAPPING
 
 def run_app():
@@ -32,7 +34,7 @@ def run_app():
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
 - %(name)s -- %(levelname)s -- %(message)s')
 
-    # check_version()# TODO a faire dans un futur proche
+    check_version()# TODO a faire dans un futur proche
 
     url_dict = {}
 
@@ -106,16 +108,42 @@ def check_version(): #TODO fonction futur a finir
     # variable en passant par un fichier tmp detruit juste après
 
     # make tmpfile
-    with tempfile.TemporaryFile() as fp:
-        temp = tempfile.NamedTemporaryFile(prefix='wc_', suffix='.json')
-        url = 'http://dev.johnben.fr/software.json'
-        r = requests.get(url, allow_redirects=True)
-        open(temp.name, 'wb').write(r.content)
-        software_list = r.content
-        f = open(temp.name)
-        data = json.load(f)
-        f.close()
-        software_list = json.dumps(tuple(dict(data)))
+
+# curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/darkvadehors/wc-python
+
+
+
+    print("tutu")
+    # git_last_hash:int = (subprocess.call(
+    #     "git ls-remote git://github.com/darkvadehors/wc-python.git",shell =True))
+    git_last_hash:int = (subprocess.call(
+        'curl \
+  -H "Accept: application/vnd.github.v3+json" \
+  https://api.github.com/repos/darkvadehors/wc-python',shell =True))
+
+    print(git_last_hash)
+
+    local_hash:int = "6d6915f13f73fbf1843a9398132522bce8f1e3e9"
+
+    if not local_hash == git_last_hash:
+        print("Faire une mise a jour")
+
+    # print( subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip())
+
+
+    # print(subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('ascii').strip())
+
+
+    # with tempfile.TemporaryFile() as fp:
+    #     temp = tempfile.NamedTemporaryFile(prefix='wc_', suffix='.json')
+    #     url = 'http://dev.johnben.fr/software.json'
+    #     r = requests.get(url, allow_redirects=True)
+    #     open(temp.name, 'wb').write(r.content)
+    #     software_list = r.content
+    #     f = open(temp.name)
+    #     data = json.load(f)
+    #     f.close()
+    #     software_list = json.dumps(tuple(dict(data)))
 
 
 def generate_url(soft_name):
@@ -247,7 +275,7 @@ def directory()-> str:
     return save_path
 
 
-def install_download_app( software_path:str, strategy: Installationstrategy):
+def install_download_app( software_path:str, strategy: InstallationStrategy):
 
     logging.debug(f"===>Enter in install download app  ->{software_path}")
 
