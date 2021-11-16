@@ -9,11 +9,11 @@ import pathlib
 import subprocess
 import tempfile
 from urllib import request
-
 import requests
 
 import app.software_ui.window as sui_windows
-
+from app.extension_strategy import Installationstrategy
+from app.extension_strategy import NAME_STRATEGY_MAPPING
 
 def run_app():
     """Same as name Run App
@@ -32,7 +32,7 @@ def run_app():
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
 - %(name)s -- %(levelname)s -- %(message)s')
 
-    check_version()# TODO a faire dans un futur proche
+    # check_version()# TODO a faire dans un futur proche
 
     url_dict = {}
 
@@ -43,7 +43,7 @@ def run_app():
     if len(sotfware_list) < 1:
         exit()
 
-    software_path:str = None
+    software_path: str = ""
 
     for software in sotfware_list:
         try:
@@ -247,42 +247,15 @@ def directory()-> str:
     return save_path
 
 
-def install_download_app( software_path):
+def install_download_app( software_path:str, strategy: Installationstrategy):
+
     logging.debug(f"===>Enter in install download app  ->{software_path}")
 
     # Split name for extract extension
     software_extension = os.path.splitext(software_path)
     logging.debug(f" split path & get extension  -> {software_extension[1]}")
 
-    if software_extension[1] == ".pkg":
-        logging.debug(f"file is ->pkg")
-        subprocess .call(
-            f"sudo -S installer -allowUntrusted -verboseR -pkg {software_path} -target /",
-            shell =True)
-
-
-
-
-
-
-    elif software_extension[1] == ".dmg":
-        logging.debug(f"file is ->dmg")
-        ...
-
-    elif software_extension[1] == ".bzip":
-        logging.debug(f"file is ->bzip")
-        ...
-
-    elif software_extension[1] == ".tar":
-        logging.debug(f"file is ->tar")
-        ...
-
-    elif software_extension[1] == ".json":
-        logging.debug(f"file is ->json")
-        subprocess .call(f"open -a TextEdit {software_path}", shell =True)
-    else:
-        logging.debug(f"unknow file")
-        print("Extension non reconnu")
+    strategy.execute(software_path)#TODO: var path & name
 
 
 if __name__ == "__main__":
