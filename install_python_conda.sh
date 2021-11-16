@@ -9,6 +9,7 @@ yes | conda install logging
 yes | conda install importlib
 yes | conda install tempfile
 yes | conda install requests
+yes | conda install -c anaconda requests
 yes | conda install importlib
 yes | conda install pathlib
 yes | conda install subprocess
