@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$APPLICATION_NAME="wc.app"
+
 CURRENT_PATH=$PWD
 echo "changement de dossier"
 cd $CURRENT_PATH
