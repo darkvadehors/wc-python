@@ -4,10 +4,11 @@ def model_pattern():
     #  fichier stoke sur le repo git en mode texte
     model_pattern_tuple = (
             {"designer":["firefox","vscode"]},#TODO: add MAMP,
-            {"coder":["firefox","vscode"]},#TODO: github Desktop, git, MAMP
+            {"coder":["firefox","vscode","git"]},#TODO: github Desktop, git, MAMP
             {"test":["test"]},
             {"test firefox":["firefox"]},
-            {"test Vscode":["vscode"]}
+            {"test Vscode":["vscode"]},
+            {"test git":["git"]}
             )
     return model_pattern_tuple
 
