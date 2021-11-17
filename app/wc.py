@@ -31,7 +31,7 @@ def run_app():
     # start Logger
     save_path = directory()
     logging.basicConfig( filename=save_path + 'wc.log',
-                        level=logging.DEBUG,
+                        level=logging.INFO,
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
 - %(name)s -- %(levelname)s -- %(message)s')
 
@@ -86,35 +86,36 @@ def software_distant_name_resolver(url):
 
     logging.debug(f"software name extractor 1-> {url}")
     logging.debug(f"url avant recuperation du nom {url}")
-    software_name = request.urlopen(
-        request.Request(url)).info().get_filename()
-
-    logging.info(f"software name extractor 1 :{ software_name }")
-    if not software_name == None:
+    software_name:str = ""
+    try:
+        software_name = request.urlopen(
+            request.Request(url)).info().get_filename()
         return software_name
+    except:
+        logging.info(f"software name extractor 1 :{ software_name }")
 
-    elif software_name == None:
-        logging.debug(f"software name extractor 2-> {url}")
+        if software_name == None: #FIXME:Faire un callback pour boucler
+            logging.debug(f"software name extractor 2-> {url}")
 
-        # Split Url for extract extesion
-        software_name = os.path.splitext(url)
+            # Split Url for extract extesion
+            software_name = os.path.splitext(url)
 
-        #save Extension
-        software_extension = software_name[1]
+            #save Extension
+            software_extension = software_name[1]
 
-        #split for extract name
-        software_name_splited = software_name[0].split("/")
+            #split for extract name
+            software_name_splited = software_name[0].split("/")
 
-        # lenght of the list
-        software_len = len(software_name_splited)
+            # lenght of the list
+            software_len = len(software_name_splited)
 
-        #take the last elements
-        software_name = software_name_splited[software_len -1]
-        # return join name whit .ext
-        logging.debug(f"Extension {software_name}{software_extension}")
-        return software_name + software_extension
-    else:
-        logging.error("impossible de récuéperer le nom du file")
+            #take the last elements
+            software_name = software_name_splited[software_len -1]
+            # return join name whit .ext
+            logging.debug(f"Extension {software_name}{software_extension}")
+            return software_name + software_extension
+        else:
+            logging.error("impossible de récuéperer le nom du file")
 
 
 
