@@ -14,7 +14,7 @@ class PkgInstallationStrategy( InstallationStrategy ):
     def execute(cls , software_path ):
         logging.debug(f"file is ->pkg")
         subprocess .call(
-            f"sudo -S installer -allowUntrusted -verboseR -pkg {software_path} -target /",
+            f"sudo -S installer -allowUntrusted -verbose -pkg {software_path} -target /",
             shell =True)
 
         return super().execute()
