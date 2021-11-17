@@ -19,8 +19,8 @@ class PkgInstallationStrategy( InstallationStrategy ):
     def execute(cls , software_path ):
         logging.debug(f"file is ->pkg")
         subprocess .call(
-            f"sudo -S installer -allowUntrusted -verbose -pkg {software_path} -target /",
-            shell =True)
+f"sudo -S installer -allowUntrusted -verbose -pkg {software_path} -target /",
+shell =True)
 
         return super().execute()
 
@@ -32,7 +32,9 @@ class DmgInstallationStrategy( InstallationStrategy ):
         for file in os.listdir("/mydir"):
             if file.endswith(".app"):
                 print(os.path.join("/mydir", file))
-                # os.replace(software_path, "path/to/new/destination/for/file.foo")
+                # os.replace(
+                    # software_path,
+                    # "path/to/new/destination/for/file.foo")
 
         return super().execute()
 
@@ -47,6 +49,11 @@ class TarInstallationStrategy( InstallationStrategy ):
     def execute(cls, software_path):
         logging.debug(f"file is ->Tar")
         return super().execute()
+class JsonInstallationStrategy( InstallationStrategy ):
+    @classmethod
+    def execute(cls, software_path):
+        logging.debug(f"file is ->Tar")
+        subprocess .call(f"open -a TextEdit {software_path}", shell =True)
 
 class ZipInstallationStrategy( InstallationStrategy ):
     @classmethod
@@ -77,6 +84,7 @@ NAME_STRATEGY_MAPPING = {
     ".tar" : TarInstallationStrategy,
     ".bzip" : BzipInstallationStrategy,
     ".zip" : ZipInstallationStrategy,
+    ".json" : JsonInstallationStrategy,
 }
 
 def install_download_app(soft_path: str, strategy: InstallationStrategy):
@@ -88,61 +96,3 @@ if __name__ == "__main__":
     strategy = NAME_STRATEGY_MAPPING[extension]
 
     # install_download_app( "blabla/blibli" , strategy)
-
-
-
-
-#     """
-
-
-
-# Tout d'abord, montez l'image dmg : sudo hdiutil attach <image>.dmg
-
-# L'image sera montée sur /Volumes/<image>. Le mien contenait un paquet que j'ai installé avec : sudo installer -package /Volumes/<image>/<image>.pkg -target /
-
-# Enfin démonter l'image : sudo hdiutil detach /Volumes/<image>.
-
-
-
-
-
-
-# script complet
-
-
-
-#     # usage: installdmg https://example.com/path/to/pkg.dmg
-# function installdmg {
-#     set -x
-#     tempd=$(mktemp -d)
-#     curl $1 > $tempd/pkg.dmg
-#     listing=$(sudo hdiutil attach $tempd/pkg.dmg | grep Volumes)
-#     volume=$(echo "$listing" | cut -f 3)
-#     if [ -e "$volume"/*.app ]; then
-#       sudo cp -rf "$volume"/*.app /Applications
-#     elif [ -e "$volume"/*.pkg ]; then
-#       package=$(ls -1 "$volume" | grep .pkg | head -1)
-#       sudo installer -pkg "$volume"/"$package" -target /
-#     fi
-#     sudo hdiutil detach "$(echo "$listing" | cut -f 1)"
-#     rm -rf $tempd
-#     set +x
-# }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#     """
