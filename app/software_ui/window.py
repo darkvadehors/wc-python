@@ -244,7 +244,9 @@ def check_version(): #TODO fonction futur a finir
     local_hash:int = "6d6915f13f73fbf1843a9398132522bce8f1e3e9"
 
     repo_url = 'https://github.com//darkvadehors/wc-python.git'
-    process = subprocess.Popen(["git", "ls-remote", repo_url], stdout=subprocess.PIPE)
+    process = subprocess.Popen(
+        ["git", "ls-remote", repo_url],
+        stdout=subprocess.PIPE)
     stdout, stderr = process.communicate()
     sha = re.split(r'\t+', stdout.decode('ascii'))[0]
     if not sha == local_hash:
