@@ -7,8 +7,8 @@ Usage:
 
 from setuptools import setup
 
-APP = ['wc.py']
-DATA_FILES = []
+APP = ['wc']
+DATA_FILES = ['logo.png']
 OPTIONS = {}
 
 setup(

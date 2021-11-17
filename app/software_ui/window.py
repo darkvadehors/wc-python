@@ -1,8 +1,12 @@
 import tkinter as tk
 import logging
+import subprocess
+import re
+import webbrowser
+from typing import Text
 from app.software_model.software import model_pattern
-from tkinter.constants import BOTH, BOTTOM, HORIZONTAL, LEFT, RIGHT, TOP, Y, YES
-from tkinter import ttk
+from tkinter.constants import BOTH, BOTTOM, COMMAND, HORIZONTAL, LEFT, RIGHT, TOP, Y, YES
+from tkinter import Frame, Label, ttk
 class Windows_interface:
     """Make windows selection
 
@@ -56,6 +60,17 @@ class Windows_interface:
 
         #  ------------------- Row 0 -------------------
 
+        # Check if update is dispo
+        update = check_version()
+        if update == True:
+            row_update = Label(self.ui_windows,
+                               text="Mise à jour disponible ",
+                               bg="red",
+                               height=1,
+                               cursor="pointinghand",)
+            row_update.pack(fill=BOTH, expand=YES)
+            row_update.bind("<Button-1>", lambda e: callback("https://github.com/darkvadehors/wc-python"))
+
         row0 = tk.Frame(self.ui_windows,  padx=10, pady=10)
         # row0.grid(columnspan=2, sticky="ws")
         row0.pack(fill=BOTH, expand=YES)
@@ -63,7 +78,7 @@ class Windows_interface:
         # Title
         row0_label_title1 = tk.Label(row0,
                                      text="Bienvenue dans le WC",
-                                     font=(FONT1, 30 ),
+                                     font=(FONT1, 20 ),
                                      padx=10,
                                      pady=10)
 
@@ -214,6 +229,30 @@ class Windows_interface:
         self.result_list_to_return = []
         self.ui_windows.destroy()
         return self.result_list_to_return
+
+def callback(url):
+    webbrowser.open_new(url)
+
+def check_version(): #TODO fonction futur a finir
+    """Check on distant repository if version as same
+
+        RETURN: sha is sha of last commit
+    """
+
+    # https://stackoverflow.com/questions/62525382/how-to-get-the-latest-commit-hash-on-remote-using-gitpython
+
+    local_hash:int = "6d6915f13f73fbf1843a9398132522bce8f1e3e9"
+
+    repo_url = 'https://github.com//darkvadehors/wc-python.git'
+    process = subprocess.Popen(["git", "ls-remote", repo_url], stdout=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    sha = re.split(r'\t+', stdout.decode('ascii'))[0]
+    if not sha == local_hash:
+        make_update = True
+    else:
+        make_update = False
+    return make_update
+
 
 
 if __name__ == "__main__":

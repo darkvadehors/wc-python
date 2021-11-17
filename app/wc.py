@@ -2,15 +2,16 @@
 
 import importlib
 import importlib.util
-import json
 import logging
 import os
 import pathlib
-import subprocess
-import tempfile
+from tkinter.constants import NONE
 from urllib import request
 import requests
-from git import Repo
+
+import ssl
+# Pour eviter Échec de la vérification du certificat :
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 import app.software_ui.window as sui_windows
@@ -34,8 +35,6 @@ def run_app():
       format='%(asctime)s -- %(filename)s -- %(lineno)d -\
 - %(name)s -- %(levelname)s -- %(message)s')
 
-    check_version()# TODO a faire dans un futur proche
-
     url_dict = {}
 
     # launch windows_interface
@@ -46,6 +45,7 @@ def run_app():
         exit()
 
     software_path: str = ""
+    file_name:str = ""
 
     for software in sotfware_list:
         try:
@@ -56,94 +56,66 @@ def run_app():
         except:
             logging.error(f"impossible de resoudre l'url de -> {software}")
 
-        # TEST: a controler
-        # name = software_distant_name_resolver(url_dict[software])
-        # print("name ",name)
-#        try:
-#             # récuprération du nom du fichier
-#             url = url_dict[software]
-#             logging.debug(f"url avant recuperation du nom {url}")
-#             file_name = request.urlopen(
-#                 request.Request(url)).info().get_filename()
 
-#             logging.info(f"récupération du nom de fichier sur le dossier distant :\
-# { file_name }")
-#        except:
-#            logging.error("impossible de récuéperer le nom du file")
         try:
             # Download file from URL
-            software_path = download(url_dict[software]) #FIXME: Activate downloader
             logging.debug(f"Téchargement du fichier -> {software_path}")
+            software_path = download(url_dict[software]) #FIXME: Activate downloader
         except:
             logging.error("impossible de download le file")
 
-    # lance l'installation
-    logging.debug(f"file_name -> {file_name}")
+        # lance l'installation
+        logging.debug(f"===>Enter in install download app  ->{software_path}")
 
-    install_download_app( software_path)
+        # Split name for extract extension
+
+
+        install_download_app(software_path)
+
+
 
 
 def software_distant_name_resolver(url):
-    logging.debug(f"===>Enter in software distant name resolver -> {url}")
-    file_name:str = ""
+    """Extract Name from URL
 
-    # récuprération du nom du fichier
-    file_name = request.urlopen(request.Request(url)).info().get_filename()
-    logging.debug(f"récupération du nom de fichier sur le dossier distant : \
-{ file_name }")
-
-    return file_name
-
-
-def check_version(): #TODO fonction futur a finir
-    """Check on distant repository if version as same
+    Args:
+        software_url (string): url of the software
     """
+    logging.debug(f"===>Enter in software distant name resolver -> {url}")
+    # récuprération du nom du fichier
 
-    # recuperation sur github du hash du dernier commit
-    # et comparaison
+    logging.debug(f"software name extractor 1-> {url}")
+    logging.debug(f"url avant recuperation du nom {url}")
+    software_name = request.urlopen(
+        request.Request(url)).info().get_filename()
 
-    # FIXME:
-    # a voir si on garde, code fonctionnel
-    # pour injecter la liste des softwares dans une
-    # variable en passant par un fichier tmp detruit juste après
+    logging.info(f"software name extractor 1 :{ software_name }")
+    if not software_name == None:
+        return software_name
 
-    # make tmpfile
+    elif software_name == None:
+        logging.debug(f"software name extractor 2-> {url}")
 
-# curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/darkvadehors/wc-python
+        # Split Url for extract extesion
+        software_name = os.path.splitext(url)
 
+        #save Extension
+        software_extension = software_name[1]
 
+        #split for extract name
+        software_name_splited = software_name[0].split("/")
 
-    print("tutu")
-    # git_last_hash:int = (subprocess.call(
-    #     "git ls-remote git://github.com/darkvadehors/wc-python.git",shell =True))
-    git_last_hash:int = (subprocess.call(
-        'curl \
-  -H "Accept: application/vnd.github.v3+json" \
-  https://api.github.com/repos/darkvadehors/wc-python',shell =True))
+        # lenght of the list
+        software_len = len(software_name_splited)
 
-    print(git_last_hash)
+        #take the last elements
+        software_name = software_name_splited[software_len -1]
+        # return join name whit .ext
+        logging.debug(f"Extension {software_name}{software_extension}")
+        return software_name + software_extension
+    else:
+        logging.error("impossible de récuéperer le nom du file")
 
-    local_hash:int = "6d6915f13f73fbf1843a9398132522bce8f1e3e9"
-
-    if not local_hash == git_last_hash:
-        print("Faire une mise a jour")
-
-    # print( subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip())
-
-
-    # print(subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('ascii').strip())
-
-
-    # with tempfile.TemporaryFile() as fp:
-    #     temp = tempfile.NamedTemporaryFile(prefix='wc_', suffix='.json')
-    #     url = 'http://dev.johnben.fr/software.json'
-    #     r = requests.get(url, allow_redirects=True)
-    #     open(temp.name, 'wb').write(r.content)
-    #     software_list = r.content
-    #     f = open(temp.name)
-    #     data = json.load(f)
-    #     f.close()
-    #     software_list = json.dumps(tuple(dict(data)))
 
 
 def generate_url(soft_name):
@@ -159,10 +131,11 @@ def generate_url(soft_name):
     """
     logging.debug(f"===>Enter in generate url -> { soft_name }")
 
+    module = import_lib(soft_name)
+    logging.debug(f"sortie Creation import lib -> { module }")
+    return module.make_url()
     try:
-        module = import_lib(soft_name)
-        logging.debug(f"sortie Creation import lib -> { module }")
-        return module.make_url()
+        ...
     except:
         logging.error(f"Software Libary -> {soft_name} not found")
 
@@ -187,10 +160,12 @@ def import_lib(soft_name):
     spec = importlib.util.spec_from_file_location("alias" ,
             f"{current_path}/app/software_model/software_{soft_name}.py")
 
+    logging.debug(f"Control addr import: \
+{current_path}/app/software_model/software_{soft_name}.py")
     module_to_import = importlib.util.module_from_spec(spec)
-
     # import path
     spec.loader.exec_module(module_to_import)
+
     return module_to_import
 
 
@@ -234,17 +209,19 @@ def download(software_url):
     """
     logging.debug(f"===>Enter in download -> { software_url } ")
 
-    software_name = software_name_extractor(software_url)
+    software_name = software_distant_name_resolver(software_url)
 
-    # Make object for download file
-    downloaded_obj = requests.get(software_url)
 
     # Make path for save the file
     save_path = directory()
     complete_save_path = os.path.join(save_path, software_name)
     logging.debug(f"path to save before dl {save_path}{software_name}")
     # check if file exist
+    logging.debug(f"Control software {os.path.isfile(complete_save_path)}")
     if not os.path.isfile(complete_save_path):
+        print("not exist")
+        # Make object for download file
+        downloaded_obj = requests.get(software_url)
         with open( complete_save_path, "wb") as file:
             logging.warn(f"File -> {software_name} doesn't exist, downloaded")
             # écriture du fichier dans abs_path
@@ -275,13 +252,21 @@ def directory()-> str:
     return save_path
 
 
-def install_download_app( software_path:str, strategy: InstallationStrategy):
+def install_download_app( software_path:str):
+    """Install application with Strategy
 
+    Args:
+        software_path (str): path abs of each application
+        strategy (InstallationStrategy): abstract Class
+    """
     logging.debug(f"===>Enter in install download app  ->{software_path}")
 
     # Split name for extract extension
+
     software_extension = os.path.splitext(software_path)
     logging.debug(f" split path & get extension  -> {software_extension[1]}")
+
+    strategy = NAME_STRATEGY_MAPPING[software_extension[1]]
 
     strategy.execute(software_path)#TODO: var path & name
 

@@ -1,11 +1,12 @@
 import os
 import re
-
+import logging
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 
 def make_url():
     """ Class model for nmake download url """
+    logging.debug("===>Enter in Firefox Module")
 
     _url_base ="https://download-installer.cdn.mozilla.net/pub/firefox/releases/"
     _remote_software_name = "Firefox"
@@ -16,7 +17,7 @@ def make_url():
     ligne = ["",""]
 
     # remplace space in url
-    url = _url_base #.replace(" ","%20")#FIXME pour supprime les espaces
+    url = _url_base.replace(" ","%20")# pour supprime les espaces
 
     req = Request(url)
     a = urlopen(req).read()
@@ -50,7 +51,7 @@ def make_url():
 
     # joint list for come back to a standard version
     software_version = ".".join(version)
-
+    logging.debug(f"Before return {software_version}")
     # Check system version and format url
     if os.uname()[0] == "Darwin":
         return "{}{}/mac/fr/{}%20{}.pkg".format(
@@ -70,6 +71,5 @@ def make_url():
         )
 
 if __name__ == "__main__":
-    ...
-    #os.system("clear")
-    #print(Firefox.make_url())
+    os.system("clear")
+    print(make_url())

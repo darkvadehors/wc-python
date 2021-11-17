@@ -6,7 +6,8 @@ def model_pattern():
             {"designer":["firefox","vscode"]},#TODO: add MAMP,
             {"coder":["firefox","vscode"]},#TODO: github Desktop, git, MAMP
             {"test":["test"]},
-            {"testfirefox":["firefox"]}
+            {"test firefox":["firefox"]},
+            {"test Vscode":["vscode"]}
             )
     return model_pattern_tuple
 
