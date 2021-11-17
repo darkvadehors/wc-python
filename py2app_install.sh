@@ -14,7 +14,7 @@ echo "py2app installé"
 py2applet --make-setup wc
 rm -rf build dist
 echo "build et dist supprime"
-python setup.py py2app -A
+python3 setup.py py2app -A
 echo "Alias créé"
 echo "lancement de l'application"
 ./dist/wc.app/Contents/MacOS/wc
