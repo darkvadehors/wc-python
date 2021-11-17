@@ -1,6 +1,11 @@
 import abc
 import subprocess
 import logging
+import os
+import zipfile
+import app.wc
+
+
 
 class InstallationStrategy( abc.ABC ):
     @classmethod
@@ -24,6 +29,10 @@ class DmgInstallationStrategy( InstallationStrategy ):
     def execute(cls, software_path):
         logging.debug(f"file is ->Dmg")
         subprocess .call(f"sudo hdiutil attach {software_path}")
+        for file in os.listdir("/mydir"):
+            if file.endswith(".app"):
+                print(os.path.join("/mydir", file))
+                # os.replace(software_path, "path/to/new/destination/for/file.foo")
 
         return super().execute()
 
@@ -43,6 +52,23 @@ class ZipInstallationStrategy( InstallationStrategy ):
     @classmethod
     def execute(cls, software_path):
         logging.debug(f"file is ->Zip")
+
+        # importing required modules
+        from zipfile import ZipFile
+
+        # specifying the zip file name
+        file_name = software_path
+        name = app.wc.software_distant_name_resolver(software_path)
+
+        # opening the zip file in READ mode
+        with ZipFile(file_name, 'r') as zip:
+
+            # extracting all the files
+
+            zip.extractall(os.path.expanduser('~/wc/'))
+            zip.write(name)
+
+
         return super().execute()
 
 NAME_STRATEGY_MAPPING = {
@@ -50,6 +76,7 @@ NAME_STRATEGY_MAPPING = {
     ".pkg" : PkgInstallationStrategy,
     ".tar" : TarInstallationStrategy,
     ".bzip" : BzipInstallationStrategy,
+    ".zip" : ZipInstallationStrategy,
 }
 
 def install_download_app(soft_path: str, strategy: InstallationStrategy):
